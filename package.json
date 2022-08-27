@@ -1,0 +1,23 @@
+{
+  "name": "whatsapp-automation",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "DEBUG=whatsapp-automation:* npm start"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.1",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "qrcode-terminal": "^0.12.0",
+    "sequelize": "^6.21.4",
+    "whatsapp-web.js": "^1.17.1"
+  }
+}
