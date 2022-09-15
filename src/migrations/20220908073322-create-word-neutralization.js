@@ -1,22 +1,18 @@
-"use strict";
-
+'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("HadistArbains", {
+    await queryInterface.createTable('wordNeutralizations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      no: {
-        type: Sequelize.INTEGER
-      },
-      title: {
+      word: {
         type: Sequelize.STRING
       },
-      description: {
-        type: Sequelize.TEXT
+      neutralization: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +25,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("HadistArbains");
+    await queryInterface.dropTable('wordNeutralizations');
   }
 };

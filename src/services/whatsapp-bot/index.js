@@ -1,11 +1,10 @@
+const fs = require("fs");
 const qrcode = require("qrcode-terminal");
+const { Client, LocalAuth } = require("whatsapp-web.js");
 
-const { Client } = require("whatsapp-web.js");
-const client = new Client();
-
-const { HadistArbain } = require("../../models");
-
-let mode = "";
+const client = new Client({
+  authStrategy: new LocalAuth({ clientId: "client-one" })
+});
 
 client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
@@ -16,55 +15,21 @@ client.on("ready", () => {
 });
 
 client.on("message", async (message) => {
-  console.log(message.body);
-
   const key = message.body.split("-");
+  const flag = key.length > 0 ? "-" : "";
 
-  console.log("key >>>", key);
+  if (
+    key[0] === "ARBAIN" &&
+    flag === "-" &&
+    typeof parseInt(key[1]) === "number"
+  ) {
+    const response = await require("./hadistArbain")(message.body);
 
-  if (key[0] === "ARBAIN") {
-    const data = await HadistArbain.findOne({
-      where: {
-        no: parseInt(key[1])
-      }
-    });
+    if (response) message.reply(response);
+  } else {
+    const response = await require("./questionDetection")(message.body);
 
-    console.log(data);
-
-    const response = `*HADIST ARBAIN*\n\nHadist ke - ${data.dataValues.no}\n\n*${data.dataValues.title}*\n\n${data.dataValues.description}`;
-
-    message.reply(response);
-  }
-
-  if (message.body === "RTXBOT") {
-    mode = "RTXBOT";
-    message.reply("Silahkan pilih mode:\n1. Robot\n2. Human");
-  }
-
-  if (message.body === "1" && mode === "RTXBOT") {
-    mode = "";
-    message.reply("Halo saya robot");
-  }
-
-  if (message.body === "2" && mode === "RTXBOT") {
-    mode = "";
-    message.reply("Halo saya Human");
-  }
-
-  if (message.body === "halo abdan") {
-    message.reply("hai");
-  }
-
-  if (message.body === "gimana kabarnya?") {
-    message.reply("alhamdulillah sehat, kamu?");
-  }
-
-  if (message.body === "lagi dimana?") {
-    message.reply("bumi Allah nih, kamu?");
-  }
-
-  if (message.body === "lagi ngapain?") {
-    message.reply("tugas negara");
+    if (response) message.reply(response);
   }
 });
 
